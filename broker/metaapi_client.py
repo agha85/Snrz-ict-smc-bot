@@ -38,6 +38,19 @@ class MetaApiClient:
         self.account = None
         self.connection = None
 
+    async def _find_existing_account(self, login: str, server: str):
+        try:
+            accounts = await self.api.metatrader_account_api.get_accounts({})
+        except Exception:
+            return None
+
+        for acc in accounts:
+            acc_login = getattr(acc, "login", None)
+            acc_server = getattr(acc, "server", None)
+            if str(acc_login) == str(login) and acc_server == server:
+                return acc
+        return None
+
     async def _get_or_create_account(self):
         account_id = config.METAAPI_ACCOUNT_ID
         if account_id:
@@ -52,6 +65,12 @@ class MetaApiClient:
                 "نە METAAPI_ACCOUNT_ID_* هەیە و نە MT5_LOGIN/PASSWORD/SERVER — "
                 "یەکێکیان دابنێ لە Railway Environment Variables."
             )
+
+        existing = await self._find_existing_account(login, server)
+        if existing:
+            logger.info("هەژمارێکی هەبوو دۆزرایەوە بۆ login=%s — دووبارە بەکاری دەهێنین.", login)
+            return existing
+
         logger.info("دروستکردنی هەژمارێکی نوێ لە MetaApi بۆ login=%s server=%s", login, server)
         account = await self.api.metatrader_account_api.create_account(
             {
