@@ -60,6 +60,7 @@ class MetaApiClient:
                 "server": server,
                 "platform": "mt5",
                 "magic": 987654,
+                "reliability": "regular",
                 "name": f"snrz-ict-smc-bot-{config.ACCOUNT_MODE}",
             }
         )
