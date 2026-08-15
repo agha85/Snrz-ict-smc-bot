@@ -1,15 +1,13 @@
 """
-Confirmation Engine
---------------------
-یاسای ئێمە: ترەید تەنها کاتێک دەکرێت کە هەر سێ ستراتیژی (SNRZ + ICT + SMC)
-لە هەمان ئاراستەدا کۆنفیرم بن — لە تایمفرەیمە شیکاریەکاندا (Weekly/Daily/4H/1H)
-و پاشان لە تایمفرەیمی کۆنفیرمەیشندا (15m).
-
-ئەگەر تەنها یەکێک/دووانیان BUY بن و یەکێکیان SELL یان NONE بێت،
-هیچ ترەیدێک ناکرێت.
+Confirmation Engine (Scalping Mode)
+-------------------------------------
+یاسا: ترەید کاتێک دەکرێت کە بەلایەنی کەم STRATEGY_MIN_AGREE (بنەڕەت: ٢) لە ٣
+ستراتیژیەکان (SNRZ + ICT + SMC) لە هەمان ئاراستەدا کۆنفیرم بن — لە
+تایمفرەیمە شیکاریەکاندا، پاشان لە تایمفرەیمی کۆنفیرمەیشندا.
 """
 
 from typing import Dict, List
+import config
 from strategies.snrz import get_snrz_signal
 from strategies.ict import get_ict_signal
 from strategies.smc import get_smc_signal
@@ -23,9 +21,13 @@ def strategies_agree_on_timeframe(candles: List[Dict]) -> Dict:
     biases = [snrz["bias"], ict["bias"], smc["bias"]]
     detail = {"snrz": snrz, "ict": ict, "smc": smc}
 
-    if all(b == "BUY" for b in biases):
+    buy_count = sum(1 for b in biases if b == "BUY")
+    sell_count = sum(1 for b in biases if b == "SELL")
+    min_agree = config.STRATEGY_MIN_AGREE
+
+    if buy_count >= min_agree and buy_count > sell_count:
         return {"bias": "BUY", "detail": detail}
-    if all(b == "SELL" for b in biases):
+    if sell_count >= min_agree and sell_count > buy_count:
         return {"bias": "SELL", "detail": detail}
     return {"bias": "NONE", "detail": detail}
 
@@ -33,8 +35,11 @@ def strategies_agree_on_timeframe(candles: List[Dict]) -> Dict:
 def get_overall_confirmation(
     candles_by_analysis_tf: Dict[str, List[Dict]],
     candles_confirmation_tf: List[Dict],
-    min_agreeing_timeframes: int = 3,
+    min_agreeing_timeframes: int = None,
 ) -> Dict:
+    if min_agreeing_timeframes is None:
+        min_agreeing_timeframes = config.MIN_AGREEING_TIMEFRAMES
+
     votes = {}
     for tf, candles in candles_by_analysis_tf.items():
         if not candles or len(candles) < 30:
