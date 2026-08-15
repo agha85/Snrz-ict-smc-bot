@@ -37,7 +37,7 @@ class MtApiClient:
                 "MT5_LOGIN / MT5_PASSWORD / MT5_SERVER دانەنراون لە Environment Variables"
             )
         self.token: Optional[str] = None
-        self.client = httpx.AsyncClient(timeout=30.0)
+        self.client = httpx.AsyncClient(timeout=60.0)
 
     async def connect(self):
         params = {"user": self.login, "password": self.password, "server": self.server}
