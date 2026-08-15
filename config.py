@@ -30,14 +30,18 @@ SYMBOLS = [s.strip() for s in os.getenv("SYMBOLS", "XAUUSD,BTCUSD").split(",") i
 RISK_PERCENT_PER_TRADE = float(os.getenv("RISK_PERCENT_PER_TRADE", "30"))
 MAX_OPEN_TRADES = int(os.getenv("MAX_OPEN_TRADES", "1"))
 SL_BUFFER_USD = float(os.getenv("SL_BUFFER_USD", "1.5"))
-RISK_REWARD_RATIO = float(os.getenv("RISK_REWARD_RATIO", "2.0"))
+RISK_REWARD_RATIO = float(os.getenv("RISK_REWARD_RATIO", "1.5"))
 
-# --- Timeframes ---
-ANALYSIS_TIMEFRAMES = ["1W", "1D", "4H", "1H"]
-CONFIRMATION_TIMEFRAME = "15m"
+# --- Confirmation rules (Scalping) ---
+STRATEGY_MIN_AGREE = int(os.getenv("STRATEGY_MIN_AGREE", "2"))
+MIN_AGREEING_TIMEFRAMES = int(os.getenv("MIN_AGREEING_TIMEFRAMES", "2"))
+
+# --- Timeframes (بۆ سکاڵپ — خێراتر لە Weekly/Daily) ---
+ANALYSIS_TIMEFRAMES = ["1H", "30m", "15m", "5m"]
+CONFIRMATION_TIMEFRAME = "1m"
 
 # --- Loop ---
-POLL_INTERVAL_SECONDS = int(os.getenv("POLL_INTERVAL_SECONDS", "60"))
+POLL_INTERVAL_SECONDS = int(os.getenv("POLL_INTERVAL_SECONDS", "20"))
 
 # --- Safety ---
 DRY_RUN = _get_bool("DRY_RUN", default=True)
