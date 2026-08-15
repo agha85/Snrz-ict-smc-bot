@@ -37,7 +37,7 @@ STRATEGY_MIN_AGREE = int(os.getenv("STRATEGY_MIN_AGREE", "2"))
 MIN_AGREEING_TIMEFRAMES = int(os.getenv("MIN_AGREEING_TIMEFRAMES", "2"))
 
 # --- Timeframes (بۆ سکاڵپ — خێراتر لە Weekly/Daily) ---
-ANALYSIS_TIMEFRAMES = ["1H", "30m", "15m", "5m"]
+ANALYSIS_TIMEFRAMES = ["30m" , "5m"]
 CONFIRMATION_TIMEFRAME = "1m"
 
 # --- Loop ---
