@@ -34,7 +34,7 @@ RISK_REWARD_RATIO = float(os.getenv("RISK_REWARD_RATIO", "1.5"))
 
 # --- Confirmation rules (Scalping) ---
 STRATEGY_MIN_AGREE = int(os.getenv("STRATEGY_MIN_AGREE", "2"))
-MIN_AGREEING_TIMEFRAMES = int(os.getenv("MIN_AGREEING_TIMEFRAMES", "2"))
+MIN_AGREEING_TIMEFRAMES = int(os.getenv("MIN_AGREEING_TIMEFRAMES", "1"))
 
 # --- Timeframes (بۆ سکاڵپ — خێراتر لە Weekly/Daily) ---
 ANALYSIS_TIMEFRAMES = ["5m"]
