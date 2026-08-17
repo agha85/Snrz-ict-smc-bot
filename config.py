@@ -50,6 +50,9 @@ GRID_LOT_SIZE = float(os.getenv("GRID_LOT_SIZE", "0.01"))
 GRID_SL_PIPS = float(os.getenv("GRID_SL_PIPS", "10"))
 GRID_TRAIL_TRIGGER_PIPS = float(os.getenv("GRID_TRAIL_TRIGGER_PIPS", "30"))
 GRID_TRAIL_SL_PIPS = float(os.getenv("GRID_TRAIL_SL_PIPS", "10"))
+# ئەگەر ئۆردەرە چاوەڕوانەکان (pending) لەم ماوەیەدا پڕ نەکرانەوە، پاک دەکرێنەوە
+# و لە زۆنی نوێدا دووبارە دادەنرێن (ئەگەر بایاسی نوێ هەبوو)
+GRID_MAX_AGE_MINUTES = float(os.getenv("GRID_MAX_AGE_MINUTES", "60"))
 
 PIP_SIZES = _parse_pip_sizes(os.getenv("PIP_SIZES", "XAUUSD:0.1,BTCUSD:1.0"))
 DEFAULT_PIP_SIZE = float(os.getenv("DEFAULT_PIP_SIZE", "0.1"))
