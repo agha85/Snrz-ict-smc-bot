@@ -140,6 +140,18 @@ class MtApiClient:
         logger.info("✅ Limit نێردرا: %s @ %.2f -> %s", bias, price, result)
         return result
 
+    async def cancel_pending_order(self, ticket):
+        if config.DRY_RUN:
+            logger.info("🧪 DRY_RUN — ئۆردەری چاوەڕوان هەڵناگیرێت: ticket=%s", ticket)
+            return {"dry_run": True}
+
+        params = {"id": self.token, "ticket": ticket}
+        resp = await self.client.get(f"{BASE_URL}/OrderCancelTask", params=params)
+        resp.raise_for_status()
+        result = resp.json()
+        logger.info("🗑️ ئۆردەری چاوەڕوان هەڵگیرا: ticket=%s | %s", ticket, result)
+        return result
+
     async def modify_stop_loss(self, ticket, new_sl: float, take_profit: float = 0):
         if config.DRY_RUN:
             logger.info("🧪 DRY_RUN — SL ناگوازرێتەوە بۆ ticket=%s new_sl=%.2f", ticket, new_sl)
