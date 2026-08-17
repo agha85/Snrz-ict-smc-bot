@@ -1,35 +1,17 @@
 """
-Confirmation Engine (Scalping Mode)
--------------------------------------
-یاسا: ترەید کاتێک دەکرێت کە بەلایەنی کەم STRATEGY_MIN_AGREE (بنەڕەت: ٢) لە ٣
-ستراتیژیەکان (SNRZ + ICT + SMC) لە هەمان ئاراستەدا کۆنفیرم بن — لە
-تایمفرەیمە شیکاریەکاندا، پاشان لە تایمفرەیمی کۆنفیرمەیشندا.
+Confirmation Engine (SNRZ only)
+---------------------------------
+تەنها ستراتیژی SNRZ بەکاردێت (ICT و SMC لابران، بەپێی داواکاری).
 """
 
 from typing import Dict, List
 import config
 from strategies.snrz import get_snrz_signal
-from strategies.ict import get_ict_signal
-from strategies.smc import get_smc_signal
 
 
 def strategies_agree_on_timeframe(candles: List[Dict]) -> Dict:
-    snrz = get_snrz_signal(candles)
-    ict = get_ict_signal(candles)
-    smc = get_smc_signal(candles)
-
-    biases = [snrz["bias"], ict["bias"], smc["bias"]]
-    detail = {"snrz": snrz, "ict": ict, "smc": smc}
-
-    buy_count = sum(1 for b in biases if b == "BUY")
-    sell_count = sum(1 for b in biases if b == "SELL")
-    min_agree = config.STRATEGY_MIN_AGREE
-
-    if buy_count >= min_agree and buy_count > sell_count:
-        return {"bias": "BUY", "detail": detail}
-    if sell_count >= min_agree and sell_count > buy_count:
-        return {"bias": "SELL", "detail": detail}
-    return {"bias": "NONE", "detail": detail}
+    result = get_snrz_signal(candles)
+    return {"bias": result["bias"], "detail": {"snrz": result}}
 
 
 def get_overall_confirmation(
@@ -60,7 +42,7 @@ def get_overall_confirmation(
     if bias_from_analysis == "NONE":
         return {
             "bias": "NONE",
-            "reason": f"شیکاری تایمفرەیمەکان یەکناگرن (BUY={buy_votes}, SELL={sell_votes})",
+            "reason": f"SNRZ تایمفرەیمەکان یەکناگرن (BUY={buy_votes}, SELL={sell_votes})",
             "votes": votes,
         }
 
