@@ -40,8 +40,8 @@ ACCOUNT_MODE = os.getenv("ACCOUNT_MODE", "demo").lower()
 SYMBOLS = [s.strip() for s in os.getenv("SYMBOLS", "XAUUSD,BTCUSD").split(",") if s.strip()]
 
 # --- Timeframes (بۆ SNRZ) ---
-ANALYSIS_TIMEFRAMES = ["30m", "5m"]
-CONFIRMATION_TIMEFRAME = "1m"
+ANALYSIS_TIMEFRAMES = ["5m"]
+CONFIRMATION_TIMEFRAME = "5m"
 MIN_AGREEING_TIMEFRAMES = int(os.getenv("MIN_AGREEING_TIMEFRAMES", "1"))
 
 # --- Grid strategy (SNRZ only) ---
